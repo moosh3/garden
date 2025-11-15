@@ -180,6 +180,7 @@ export const getStaticProps: GetStaticProps = async () => {
         github,
       },
     },
+    revalidate: 3600, // Revalidate every hour (in seconds)
   }
 }
 
