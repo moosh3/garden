@@ -60,11 +60,6 @@ export default function Home({ activity }: HomeProps) {
           </nav>
         </header>
 
-        <section className="about">
-          <p>
-          </p>
-        </section>
-
         <section className="activity">
           <h2>What I&apos;m Doing</h2>
 
