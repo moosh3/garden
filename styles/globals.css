@@ -1,0 +1,149 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #ffffff;
+  color: #1a1a1a;
+  line-height: 1.6;
+}
+
+main {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+/* Typography */
+h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #1a1a1a;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 2.5rem 0 1rem 0;
+  color: #1a1a1a;
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem 0;
+  color: #1a1a1a;
+}
+
+p {
+  margin: 0.75rem 0;
+  color: #2a2a2a;
+}
+
+/* Links */
+a {
+  color: #2d5c2d;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+a:hover {
+  border-bottom-color: #2d5c2d;
+}
+
+a:visited {
+  color: #1f471f;
+}
+
+/* Sections */
+.about {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.activity {
+  margin-bottom: 3rem;
+}
+
+.activity-section {
+  margin-bottom: 2.5rem;
+}
+
+/* Lists */
+ul {
+  list-style: none;
+  margin: 0.5rem 0;
+}
+
+li {
+  margin: 0.5rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+
+li:before {
+  content: "·";
+  position: absolute;
+  left: 0;
+  color: #2d5c2d;
+  font-weight: bold;
+}
+
+/* Metadata text */
+.date,
+.author {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.repo {
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.profile-link {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.profile-link a {
+  color: #2d5c2d;
+  font-weight: 500;
+}
+
+/* Footer */
+footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e5e5;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  main {
+    padding: 40px 16px;
+  }
+  
+  h1 {
+    font-size: 1.3rem;
+  }
+  
+  h2 {
+    font-size: 1.1rem;
+  }
+}
+
