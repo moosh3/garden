@@ -54,9 +54,25 @@ The static files will be generated in the `out/` directory.
 
 ### Vercel (Recommended)
 
-The project is configured for static export and will work with Vercel's static hosting.
+Vercel has first-class support for Next.js with static export.
 
-**Option 1: Using Vercel CLI**
+**Option 1: Using Vercel Dashboard (Easiest)**
+
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com) and sign in
+3. Click "Add New Project" and import your repository
+4. Vercel will auto-detect Next.js and use the settings from `next.config.js`
+5. **Before deploying**, add environment variables:
+   - Go to Project Settings → Environment Variables
+   - Add all variables from `env.template`:
+     - `NEXT_PUBLIC_LETTERBOXD_USERNAME`
+     - `NEXT_PUBLIC_GOODREADS_USER_ID`
+     - `NEXT_PUBLIC_GITHUB_USERNAME`
+     - `GITHUB_TOKEN` (optional)
+   - Make sure to set them for "Production", "Preview", and "Development"
+6. Click Deploy
+
+**Option 2: Using Vercel CLI**
 
 1. Install Vercel CLI:
 ```bash
@@ -68,17 +84,12 @@ npm i -g vercel
 vercel
 ```
 
-3. Set environment variables in Vercel dashboard under Settings → Environment Variables
+3. Follow the prompts and set environment variables when asked, or add them later in the dashboard
 
-**Option 2: Using Vercel Dashboard**
-
-1. Push your code to GitHub
-2. Import the repository in Vercel
-3. Vercel will auto-detect the configuration from `vercel.json`
-4. Add environment variables in Project Settings → Environment Variables
-5. Deploy
-
-**Important:** The `vercel.json` is configured to use the static export from the `out/` directory. Environment variables must be set before build time as they're baked into the static files.
+**Important:** 
+- Vercel will automatically detect the `output: 'export'` configuration in `next.config.js`
+- Environment variables must be set **before** build time as they're baked into the static HTML
+- Each time you update environment variables, you'll need to redeploy
 
 ### Netlify
 

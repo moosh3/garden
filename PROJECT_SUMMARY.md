@@ -37,7 +37,7 @@ The site follows a clean, minimal aesthetic inspired by nat.org:
 ### Deployment Configurations
 
 Included deployment setups for:
-- **Vercel** (`vercel.json`)
+- **Vercel** (auto-detected from `next.config.js`)
 - **Netlify** (`.netlify/netlify.toml`)
 - **GitHub Pages** (`.github/workflows/deploy.yml`)
 
