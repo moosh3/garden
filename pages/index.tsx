@@ -65,6 +65,24 @@ export default function Home({ activity }: HomeProps) {
           <h2>What I&apos;m Doing</h2>
 
           <div className="activity-section">
+            <h3>Living</h3>
+            <ul>
+              <li>
+                Married my beautiful wife, Mary Kate Ashe-Cunningham
+                <span className="date"> — August</span>
+              </li>
+              <li>
+                Learning French
+                <span className="date"> — November</span>
+              </li>
+              <li>
+                Joined DRW&apos;s AI Research and Development team
+                <span className="date"> — October</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="activity-section">
             <h3>Watching</h3>
             {activity.letterboxd.length > 0 ? (
               <ul>
