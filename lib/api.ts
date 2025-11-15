@@ -15,7 +15,7 @@ interface GoodreadsItem {
 interface GithubItem {
   type: string;
   repo?: string;
-  description: string;
+  description?: string;
   date: string;
   link: string;
 }
@@ -136,47 +136,37 @@ export async function fetchGithubActivity(): Promise<GithubItem[]> {
     }
 
     const events = await response.json()
-    
-    // Filter and format the most interesting events
-    const relevantEvents = events
-      .filter((event: any) => 
-        ['PushEvent', 'CreateEvent', 'PullRequestEvent', 'ReleaseEvent'].includes(event.type)
-      )
-      .slice(0, 5)
-      .map((event: any) => {
-        let description = ''
-        
-        switch (event.type) {
-          case 'PushEvent':
-            const commitCount = event.payload?.commits?.length || 0
-            description = `Pushed ${commitCount} commit${commitCount !== 1 ? 's' : ''}`
-            break
-          case 'CreateEvent':
-            description = `Created ${event.payload?.ref_type || 'repository'}`
-            break
-          case 'PullRequestEvent':
-            description = `${event.payload?.action} pull request`
-            break
-          case 'ReleaseEvent':
-            description = `Released ${event.payload?.release?.tag_name || 'new version'}`
-            break
-          default:
-            description = event.type.replace('Event', '')
-        }
-        
-        return {
-          type: event.type,
-          repo: event.repo?.name,
-          description,
-          date: new Date(event.created_at).toLocaleDateString('en-US', { 
-            month: 'short', 
-            day: 'numeric'
-          }),
-          link: `https://github.com/${event.repo?.name}`,
-        }
+    const allowedTypes = ['PushEvent', 'CreateEvent', 'PullRequestEvent', 'ReleaseEvent']
+    const uniqueRepos: GithubItem[] = []
+    const seenRepos = new Set<string>()
+
+    for (const event of events) {
+      if (!allowedTypes.includes(event.type)) {
+        continue
+      }
+
+      const repoName = event.repo?.name
+      if (!repoName || seenRepos.has(repoName)) {
+        continue
+      }
+
+      seenRepos.add(repoName)
+      uniqueRepos.push({
+        type: event.type,
+        repo: repoName,
+        date: new Date(event.created_at).toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+        }),
+        link: `https://github.com/${repoName}`,
       })
+
+      if (uniqueRepos.length === 3) {
+        break
+      }
+    }
     
-    return relevantEvents
+    return uniqueRepos
   } catch (error) {
     console.error('Error fetching GitHub activity:', error)
     return []

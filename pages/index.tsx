@@ -6,7 +6,7 @@ import { fetchLetterboxdActivity, fetchGoodreadsActivity, fetchGithubActivity } 
 interface Activity {
   letterboxd: Array<{ title: string; date: string; link: string }>;
   goodreads: Array<{ title: string; author?: string; link: string }>;
-  github: Array<{ type: string; repo?: string; description: string; date: string; link: string }>;
+  github: Array<{ type: string; repo?: string; description?: string; date: string; link: string }>;
 }
 
 interface HomeProps {
@@ -20,6 +20,7 @@ export default function Home({ activity }: HomeProps) {
         <title>Alec</title>
         <meta name="description" content="My digital garden" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </Head>
       <main>
         <header className="page-header">
@@ -121,9 +122,7 @@ export default function Home({ activity }: HomeProps) {
                   <li key={index}>
                     <a href={item.link} target="_blank" rel="noopener noreferrer">
                       {item.repo && <span className="repo">{item.repo}</span>}
-                      {item.description && <span> — {item.description}</span>}
                     </a>
-                    {item.date && <span className="date"> — {item.date}</span>}
                   </li>
                 ))}
               </ul>
