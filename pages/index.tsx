@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Image from 'next/image'
 import { GetStaticProps } from 'next'
 import { fetchLetterboxdActivity, fetchGoodreadsActivity, fetchGithubActivity } from '@/lib/api'
 
@@ -16,24 +17,51 @@ export default function Home({ activity }: HomeProps) {
   return (
     <>
       <Head>
-        <title>Garden</title>
+        <title>Alec</title>
         <meta name="description" content="My digital garden" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main>
-        <header>
-          <h1>Garden</h1>
+        <header className="page-header">
+          <Image
+            src="/me.jpg"
+            alt="Portrait of me"
+            width={120}
+            height={120}
+            priority
+            className="profile-photo"
+          />
+          <h1 className="sr-only">Alec Cunningham</h1>
+          <nav className="social-links" aria-label="Social links">
+            <a
+              href="https://www.linkedin.com/in/aleccunningham/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+            >
+              in
+            </a>
+            <a
+              href="https://github.com/moosh3"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+            >
+              gh
+            </a>
+            <a
+              href="http://x.com/alec_c_c_"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="X"
+            >
+              x
+            </a>
+          </nav>
         </header>
 
         <section className="about">
-          <h2>About</h2>
           <p>
-            This is my corner of the internet. A simple space where I share what I&apos;m reading, 
-            watching, and building. Nothing fancy, just a place to exist online.
-          </p>
-          <p>
-            I believe in keeping things simple and focused. This page reflects that philosophy—
-            minimal design, maximum clarity.
           </p>
         </section>
 
