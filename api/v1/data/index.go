@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/moosh3/garden/internal/api"
+	"github.com/moosh3/garden/pkg/api"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {

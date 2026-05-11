@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/moosh3/garden/internal/api"
+	"github.com/moosh3/garden/pkg/api"
 )
 
 const (
