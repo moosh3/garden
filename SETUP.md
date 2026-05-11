@@ -29,6 +29,12 @@ Then edit `.env.local` with your information:
 - `NEXT_PUBLIC_GOODREADS_USER_ID`: Your Goodreads user ID (found in your profile URL)
 - `NEXT_PUBLIC_GITHUB_USERNAME`: Your GitHub username
 - `GITHUB_TOKEN`: (Optional) GitHub personal access token for higher API rate limits
+- `API_BEARER_TOKEN`: Shared secret required for `/api/v1/whoop` and `/api/v1/data`
+- `KV_REST_API_URL`: Vercel KV / Upstash Redis REST URL
+- `KV_REST_API_TOKEN`: Vercel KV / Upstash Redis REST token
+- `WHOOP_CLIENT_ID`: WHOOP Developer Dashboard client ID
+- `WHOOP_CLIENT_SECRET`: WHOOP Developer Dashboard client secret
+- `WHOOP_REDIRECT_URL`: WHOOP OAuth redirect URL. Use `http://localhost:8787/oauth/callback` for local bootstrap.
 
 ## Development
 
@@ -39,6 +45,44 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Personal Data API
+
+The Go API is deployed by Vercel from the root `api/` directory.
+
+- `GET /api/v1/health`: public health check
+- `GET /api/v1/whoop`: protected WHOOP readiness summary
+- `GET /api/v1/data?source=whoop`: protected source-router endpoint
+
+Protected endpoints require:
+
+```bash
+Authorization: Bearer $API_BEARER_TOKEN
+```
+
+Example:
+
+```bash
+curl -H "Authorization: Bearer $API_BEARER_TOKEN" \
+  https://alec.id/api/v1/whoop
+```
+
+WHOOP readiness responses are cached in Vercel KV for 12 hours. If the cache is stale and WHOOP is temporarily unavailable, the API returns the stale cached value instead of failing.
+
+### WHOOP OAuth Bootstrap
+
+1. Create a WHOOP app in the WHOOP Developer Dashboard.
+2. Add `http://localhost:8787/oauth/callback` as a redirect URL.
+3. Set `WHOOP_CLIENT_ID`, `WHOOP_CLIENT_SECRET`, `KV_REST_API_URL`, and `KV_REST_API_TOKEN` in `.env.local`.
+4. Run:
+
+```bash
+npm run whoop:bootstrap
+```
+
+5. Open the printed WHOOP authorization URL and approve the app. The local callback stores the initial WHOOP token set in KV.
+
+The app requests `offline read:recovery`. WHOOP rotates refresh tokens, so the production API persists each refreshed token set back into KV.
 
 ## Building for Production
 
@@ -87,9 +131,9 @@ vercel
 3. Follow the prompts and set environment variables when asked, or add them later in the dashboard
 
 **Important:** 
-- Vercel will automatically detect the `output: 'export'` configuration in `next.config.js`
-- Environment variables must be set **before** build time as they're baked into the static HTML
-- Each time you update environment variables, you'll need to redeploy
+- The current Vercel build outputs `.next`, which supports the Next.js site and root-level Go functions together.
+- Runtime API environment variables must be set for Production and Preview before calling `/api/v1/*`.
+- `API_BEARER_TOKEN`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `WHOOP_CLIENT_ID`, and `WHOOP_CLIENT_SECRET` must remain server-only secrets.
 
 ### Netlify
 
@@ -148,4 +192,3 @@ Create a token at: https://github.com/settings/tokens (no special scopes needed 
 ## License
 
 MIT
-
