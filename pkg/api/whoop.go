@@ -66,8 +66,8 @@ type whoopRecoveryResponse struct {
 	Records []struct {
 		ScoreState string `json:"score_state"`
 		Score      struct {
-			RecoveryScore   int      `json:"recovery_score"`
-			RestingHR       *int     `json:"resting_heart_rate"`
+			RecoveryScore   float64  `json:"recovery_score"`
+			RestingHR       *float64 `json:"resting_heart_rate"`
 			HRVRMSSD        *float64 `json:"hrv_rmssd_milli"`
 			SPO2Percentage  *float64 `json:"spo2_percentage"`
 			SkinTempCelsius *float64 `json:"skin_temp_celsius"`
@@ -179,14 +179,22 @@ func (s *WhoopService) fetchReadiness(ctx context.Context) (WhoopSummary, error)
 		FetchedAt:   now,
 		CachedUntil: now.Add(whoopCacheTTL),
 		Readiness: WhoopReadiness{
-			Score:            record.Score.RecoveryScore,
+			Score:            int(record.Score.RecoveryScore),
 			State:            record.ScoreState,
-			RestingHeartRate: record.Score.RestingHR,
+			RestingHeartRate: intPointerFromFloat(record.Score.RestingHR),
 			HRVRMSSDMilli:    record.Score.HRVRMSSD,
 			SPO2Percentage:   record.Score.SPO2Percentage,
 			SkinTempCelsius:  record.Score.SkinTempCelsius,
 		},
 	}, nil
+}
+
+func intPointerFromFloat(value *float64) *int {
+	if value == nil {
+		return nil
+	}
+	converted := int(*value)
+	return &converted
 }
 
 func (s *WhoopService) validAccessToken(ctx context.Context) (string, error) {
