@@ -33,32 +33,6 @@ export default function Home({ activity }: HomeProps) {
             className="profile-photo"
           />
           <h1 className="sr-only">Alec Cunningham</h1>
-          <nav className="social-links" aria-label="Social links">
-            <a
-              href="https://www.linkedin.com/in/aleccunningham/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-            >
-              in
-            </a>
-            <a
-              href="https://github.com/moosh3"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-            >
-              gh
-            </a>
-            <a
-              href="http://x.com/alec_c_c_"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="X"
-            >
-              x
-            </a>
-          </nav>
         </header>
 
         <section className="activity">
@@ -183,4 +157,3 @@ export const getStaticProps: GetStaticProps = async () => {
     revalidate: 3600, // Revalidate every hour (in seconds)
   }
 }
-
