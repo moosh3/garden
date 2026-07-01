@@ -173,10 +173,6 @@ export async function fetchGithubActivity(): Promise<GithubItem[]> {
       }
     }
     
-    if (uniqueRepos.length > 0) {
-      return uniqueRepos
-    }
-
     const reposResponse = await fetch(
       `https://api.github.com/users/${username}/repos?sort=pushed&direction=desc&per_page=10&type=owner`,
       {
@@ -192,8 +188,8 @@ export async function fetchGithubActivity(): Promise<GithubItem[]> {
 
     return repos
       .filter((repo) => repo.full_name && !repo.archived)
-      .slice(0, 3)
-      .map((repo) => ({
+      .filter((repo) => !seenRepos.has(repo.full_name as string))
+      .map((repo): GithubItem => ({
         type: 'Repository',
         repo: repo.full_name,
         date: repo.pushed_at
@@ -204,6 +200,10 @@ export async function fetchGithubActivity(): Promise<GithubItem[]> {
           : '',
         link: repo.html_url || `https://github.com/${repo.full_name}`,
       }))
+      .reduce(
+        (items, repo) => (items.length < 3 ? [...items, repo] : items),
+        uniqueRepos
+      )
   } catch (error) {
     console.error('Error fetching GitHub activity:', error)
     return []
