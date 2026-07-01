@@ -25,6 +25,7 @@ interface GithubRepo {
   html_url?: string;
   pushed_at?: string;
   archived?: boolean;
+  description?: string | null;
 }
 
 /**
@@ -185,13 +186,25 @@ export async function fetchGithubActivity(): Promise<GithubItem[]> {
     }
 
     const repos: GithubRepo[] = await reposResponse.json()
+    const repoDetails = new Map(
+      repos
+        .filter((repo) => repo.full_name)
+        .map((repo) => [repo.full_name as string, repo])
+    )
+    const githubItems = uniqueRepos.map((item) => ({
+      ...item,
+      description: item.repo
+        ? repoDetails.get(item.repo)?.description?.trim() || undefined
+        : undefined,
+    }))
 
-    return repos
+    const fallbackItems = repos
       .filter((repo) => repo.full_name && !repo.archived)
       .filter((repo) => !seenRepos.has(repo.full_name as string))
       .map((repo): GithubItem => ({
         type: 'Repository',
         repo: repo.full_name,
+        description: repo.description?.trim() || undefined,
         date: repo.pushed_at
           ? new Date(repo.pushed_at).toLocaleDateString('en-US', {
               month: 'short',
@@ -200,10 +213,8 @@ export async function fetchGithubActivity(): Promise<GithubItem[]> {
           : '',
         link: repo.html_url || `https://github.com/${repo.full_name}`,
       }))
-      .reduce(
-        (items, repo) => (items.length < 3 ? [...items, repo] : items),
-        uniqueRepos
-      )
+
+    return [...githubItems, ...fallbackItems].slice(0, 3)
   } catch (error) {
     console.error('Error fetching GitHub activity:', error)
     return []

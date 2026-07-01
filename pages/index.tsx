@@ -115,6 +115,9 @@ export default function Home({ activity }: HomeProps) {
                     <a href={item.link} target="_blank" rel="noopener noreferrer">
                       {item.repo && <span className="repo">{item.repo}</span>}
                     </a>
+                    {item.description && (
+                      <span className="repo-description">{item.description}</span>
+                    )}
                   </li>
                 ))}
               </ul>

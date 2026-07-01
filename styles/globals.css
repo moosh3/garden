@@ -140,6 +140,14 @@ li:before {
   color: #1a1a1a;
 }
 
+.repo-description {
+  display: block;
+  margin-top: 0.1rem;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
 .profile-link {
   margin-top: 1rem;
   font-size: 0.9rem;
