@@ -20,6 +20,13 @@ interface GithubItem {
   link: string;
 }
 
+interface GithubRepo {
+  full_name?: string;
+  html_url?: string;
+  pushed_at?: string;
+  archived?: boolean;
+}
+
 /**
  * Fetch recent activity from Letterboxd RSS feed
  */
@@ -166,10 +173,39 @@ export async function fetchGithubActivity(): Promise<GithubItem[]> {
       }
     }
     
-    return uniqueRepos
+    if (uniqueRepos.length > 0) {
+      return uniqueRepos
+    }
+
+    const reposResponse = await fetch(
+      `https://api.github.com/users/${username}/repos?sort=pushed&direction=desc&per_page=10&type=owner`,
+      {
+        headers,
+      }
+    )
+
+    if (!reposResponse.ok) {
+      throw new Error(`Failed to fetch GitHub repos: ${reposResponse.status}`)
+    }
+
+    const repos: GithubRepo[] = await reposResponse.json()
+
+    return repos
+      .filter((repo) => repo.full_name && !repo.archived)
+      .slice(0, 3)
+      .map((repo) => ({
+        type: 'Repository',
+        repo: repo.full_name,
+        date: repo.pushed_at
+          ? new Date(repo.pushed_at).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+            })
+          : '',
+        link: repo.html_url || `https://github.com/${repo.full_name}`,
+      }))
   } catch (error) {
     console.error('Error fetching GitHub activity:', error)
     return []
   }
 }
-
